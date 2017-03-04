@@ -1,5 +1,5 @@
 <div  ng-controller="txController" ng-init="init()">
-	<h1>Transaction -  {{ txTag}}</h1>
+	<h1>Transaction -  {{ txTag}} v1.1 sac git</h1>
 
 	<div class="row" ng-if="txData.tx_id">
 		<div class="col-md-6">
@@ -18,8 +18,8 @@
 					<p>
 						<h4>Transaction URL</h4>
 						 <div>
-						 	<a href="http://localhost/multisig/tx/{{txObj.tx_tag}}">
-						 		http://localhost/multisig/tx/{{txObj.tx_tag}}
+						 	<a href="./multisig/tx/{{txObj.tx_tag}}">
+						 		./multisig/tx/{{txObj.tx_tag}}
 						 	</a>
 						 </div>
 					</p>
@@ -53,15 +53,21 @@
 	</div>
 
 	<div class="row" ng-if="txData.tx_id">
-		<h3>Signer</h3>
-		<div ng-repeat="x in signersObj track by $index">
-      
-      <input class="form-control" placeholder="Enter your Secret Key" type="text" name="seed" ng-model="x.seed" required/>
-      
-    </div>
+	  <h3>Signer</h3>
+	  <div ng-repeat="x in signersObj track by $index">      
+        <input class="form-control" placeholder="Enter your Secret Key" type="text" name="seed" ng-model="x.seed" required/>      
+      </div>
 	</div>
+    <h3>Remote my_wallet signer URL</h3>
+    
+    <input class="form-control" placeholder="Enter remote my_wallet signer URL" type="text" name="signer_url" ng-model="signer_url" >
+    <div>
+	  <a href="{{signer_url}}/?json=%7B%22tx_tag%22:%22{{txObj.tx_tag}}%22,%22callback%22:%22{{txObj.callback}}%22%7D" target="_blank">
+		Sign with remote signer URL
+	  </a><br />
+    </div><br />
 	<div ng-if="txData.tx_id">
-		<div class="col-md-6" ng-hide="txObj.signed">
+		<div class="col-md-6" >
       <button class="btn btn-info btn-block" ng-click="signTx()">Sign Transaction</button>
     </div>
     <div class="col-md-6" ng-show="txObj.signed">

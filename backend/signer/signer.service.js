@@ -13,7 +13,9 @@ module.exports = {
     // create array of signers
     // 
       var signers = [];
-
+      console.log("save signer.service.js, req, res");
+      console.log(req);
+      console.log(res);
       req.body.signers.forEach(function(s) {
         signers.push({
                     tx_id: req.body.tx_id,
@@ -29,6 +31,7 @@ module.exports = {
         .then(function(model) {
           res.status(200).send({status: true, content: {message: 'Signer saved successfully'}});
         }).catch(function(err) {
+            console.log("error in signerCollection");
             console.log(err);
             res.status(400).send({status: false, content: {message: 'Unable to Save Signer'}});
         });

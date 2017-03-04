@@ -28,7 +28,10 @@ api.factory('Multisig', function($http) {
             });
         }, 
         signTx : function(txData) {
+            console.log("signTx");
             console.log(txData);
+            console.log($.param(txData));
+            console.log(typeof $.param(txData));
             return $http({
                 method: 'POST',
                 url: baseUrl+'signtx',

@@ -14,9 +14,12 @@ module.exports = {
 
 
   save: function (req, res) {
+    console.log("save in tx.service.js");
 
     User.forge({account_id: req.body.srcAcct}).fetch()
         .then(function(model) {
+            console.log("model");
+            console.log(model);
             if (!model) {
               console.log('User not found. Save User');
               var newUser  = new User({
@@ -27,9 +30,11 @@ module.exports = {
              return newUser.save();
               
             }else{
-              return model.save({email: req.body.email}, {patch: true});
-              // return User.where('account_id', req.body.srcAcct).save({email: req.body.email}, {patch: true});
-                // return User.forge({account_id: req.body.srcAcct}).save({email: req.body.email}, {patch: true});
+              console.log("model.save email:");
+              console.log(req.body.email);
+              //return model.save({email: req.body.email}, {patch: true});
+              return User.where('account_id', req.body.srcAcct).save({email: req.body.email}, {patch: true});
+              // return User.forge({account_id: req.body.srcAcct}).save({email: req.body.email}, {patch: true});
             }
 
             
@@ -46,6 +51,10 @@ module.exports = {
         .then(function(model) {
             if (!model) {
               console.log('Tx not found. Save new Tx');
+              console.log("userObj.id");
+              console.log(userObj.id);
+              console.log("req.body");
+              console.log(req.body);
               var newTx  = new Tx({
                       user_id: userObj.id,
                       initiator: req.body.srcAcct,
@@ -76,7 +85,9 @@ module.exports = {
   },
 
   getTx: function (req, res) {
-
+    console.log("getTX req res:");
+    console.log(req.params);
+    //console.log(res);
     Tx.forge({tx_tag: req.params.tx_tag}).fetch()
         .then(function(model) {
             if (!model) {
@@ -94,10 +105,11 @@ module.exports = {
             
         })
         .then(function(models) {
-
+             console.log("models");
+             console.log(models);
              txObj.signers = models.toJSON();
              console.log("signers model", models.toJSON());
-            res.status(200).send({status: true, content: {message: 'Transaction retrieved successfully',tx: txObj}});
+             res.status(200).send({status: true, content: {message: 'Transaction retrieved successfully',tx: txObj}});
         })
         .catch(function(err){
             console.log(err);

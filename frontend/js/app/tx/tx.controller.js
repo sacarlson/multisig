@@ -4,6 +4,7 @@ var liveNetwork = "https://horizon.stellar.org";
 
 var server = new StellarSdk.Server(testNetwork);
 
+
 multisig.controller('txController', function($scope, $state, $stateParams, $http, $rootScope, Multisig, randomString) {
 		
 	$scope.txObj = {};
@@ -13,18 +14,28 @@ multisig.controller('txController', function($scope, $state, $stateParams, $http
 	$scope.srcAcct = "";
 	$scope.responseData = {};
 	$scope.signersObj = [{'operationCount' : 1}];
+    
+   
+
 
 	$scope.init = function() {
 		console.log("sP", $stateParams);
 		$scope.txTag = $stateParams.tx_tag;
-		
+		console.log("tx_tag");
+        console.log($scope.txTag);
+        console.log("signer_url at init");
+        console.log($scope.signer_url);
+        $scope.signer_url = "http://sacarlson.github.io/my_wallet";
 
 		Multisig.getTx($scope.txTag)
 			.success(function(data) {
+                console.log("multisig.getTx data");
 				console.log(data);
 				$scope.txObj = data.content.tx;
 				$scope.txEnvelope = new StellarSdk.Transaction($scope.txObj.tx_xdr);
 				$scope.txData.tx_id = data.content.tx.id;
+                $scope.txObj.callback = "http://localhost:8888";
+                
 			})
 			.error(function(data) {
 				console.log(data);
@@ -39,21 +50,27 @@ multisig.controller('txController', function($scope, $state, $stateParams, $http
 		// get key pair from each seed
 		// sign tx with seed
 		// change back to xdr
+        console.log("signer_url at signTx");
+        console.log($scope.signer_url);
 		
 		var txBlock = new StellarSdk.Transaction($scope.txObj.tx_xdr);
 		console.log("tx txBlock", txBlock);
-		
+		console.log("pre signed env");
+        console.log(txBlock.toEnvelope().toXDR().toString("base64"));
 		// Add operations
 		$scope.signersObj.forEach(function(ops) {
 			console.log("ops: ",ops);
-
+            console.log("opps seed");
+            console.log(ops.seed);
 			var keypair = StellarSdk.Keypair.fromSeed(ops.seed);
 			console.log("keypair", keypair);
 			txBlock.sign(keypair);
 			$scope.txData.signer = keypair.accountId();
 		});
 
-		console.log("tx txBlock", txBlock);		
+		console.log("tx txBlock post sign", txBlock);
+        console.log("post signed env");
+        console.log(txBlock.toEnvelope().toXDR().toString("base64"));		
 		$scope.txEnvelope = txBlock;
 		var txString = txBlock.toEnvelope().toXDR().toString("base64");
 		console.log("txString", txString);
@@ -61,13 +78,14 @@ multisig.controller('txController', function($scope, $state, $stateParams, $http
 		$scope.txData.tx_xdr = txString;
 		// Save to DB incase others need to sign
 		
-		
+		console.log("txData to be sent to api");
+        console.log($scope.txData);
 		
 		Multisig.signTx($scope.txData)
 			.success(function(data) {
 				console.log(data);
 				var params = {
-												tx_tag: $scope.txObj.tx_tag
+				  tx_tag: $scope.txObj.tx_tag
 											};
 				$state.go('tx', params , {reload: true});
 				
