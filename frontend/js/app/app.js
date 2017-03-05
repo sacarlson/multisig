@@ -4,8 +4,8 @@ var app = angular.module('multisig',
                           'ui.router',
                           'angularRandomString',
                           'jsonFormatter',
-                          'multisigService'
-                          
+                          'multisigService',
+                          'ja.qr'
 
                         ]);
 

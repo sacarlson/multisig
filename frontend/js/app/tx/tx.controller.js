@@ -5,6 +5,7 @@ var liveNetwork = "https://horizon.stellar.org";
 var server = new StellarSdk.Server(testNetwork);
 
 
+    
 multisig.controller('txController', function($scope, $state, $stateParams, $http, $rootScope, Multisig, randomString) {
 		
 	$scope.txObj = {};
@@ -14,10 +15,8 @@ multisig.controller('txController', function($scope, $state, $stateParams, $http
 	$scope.srcAcct = "";
 	$scope.responseData = {};
 	$scope.signersObj = [{'operationCount' : 1}];
+    $scope.qrcodedata = "test";
     
-   
-
-
 	$scope.init = function() {
 		console.log("sP", $stateParams);
 		$scope.txTag = $stateParams.tx_tag;
@@ -34,8 +33,9 @@ multisig.controller('txController', function($scope, $state, $stateParams, $http
 				$scope.txObj = data.content.tx;
 				$scope.txEnvelope = new StellarSdk.Transaction($scope.txObj.tx_xdr);
 				$scope.txData.tx_id = data.content.tx.id;
-                $scope.txObj.callback = "http://localhost:8888";
-                
+                $scope.txObj.callback = "http://localhost:8888"; 
+                $scope.qrcodedata = "%7B%22tx_tag%22:%22" + $scope.txTag + "%22,%22callback%22:%22" + $scope.txObj.callback + "%22%7D";                  
+                console.log("qr", $scope.qrcode_text);            
 			})
 			.error(function(data) {
 				console.log(data);

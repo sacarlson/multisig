@@ -1,0 +1,23 @@
+{
+  "name": "multisig",
+  "homepage": "https://github.com/sacarlson/multisig",
+  "description": "group sign stellar tx",
+  "main": "index.html",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "1.5.8",
+    "angular-qr": "latest",
+    "angular-ui-router": "latest",
+    "angular-random-string": "latest",
+    "json-formatter": "latest",
+    "angular-loading-bar": "latest"
+},
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
